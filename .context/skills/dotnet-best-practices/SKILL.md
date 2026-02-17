@@ -4,17 +4,9 @@ description: Comprehensive .NET development best practices from industry experts
 ---
 
 # .NET Best Practices
-
-Production-grade .NET development guidance from top thought leaders:
-- **Milan Jovanovic** - Clean Architecture, CQRS
-- **David Fowler** - Async/Await, Concurrency (Microsoft)
-- **Jeremy D. Miller** - Vertical Slice, Wolverine
-- **Julie Lerman** - Entity Framework Core, DDD
-- **Nick Chapsas** - C# Performance, Benchmarking
-- **Andrew Lock** - ASP.NET Core Internals, DI
+Production-grade .NET development guidance from top thought leaders
 
 ## When to Apply
-
 Reference these guidelines when:
 - Architecting new .NET projects (choosing between Simple/Clean/Modular patterns)
 - Writing or reviewing C# code for performance
@@ -25,7 +17,6 @@ Reference these guidelines when:
 - Upgrading to .NET 8/9 features
 
 ## Architecture Decision Matrix
-
 Choose architecture based on **project complexity** and **team size**:
 
 | Project Type | Team Size | Recommended Architecture | Reference |
@@ -40,7 +31,6 @@ Choose architecture based on **project complexity** and **team size**:
 > **Start simple, evolve when pain points emerge.** Over-engineering kills velocity. A well-structured simple API can handle most business needs.
 
 ## Rule Categories by Priority
-
 | Priority | Category | Impact | Prefix | Reference |
 |----------|----------|--------|--------|-----------|
 | 1 | Architecture Selection | CRITICAL | `arch-` | [Project Sizing](references/arch-project-sizing.md) |
@@ -56,7 +46,6 @@ Choose architecture based on **project complexity** and **team size**:
 ---
 
 ## Quick Reference
-
 ### 1. Architecture Selection (CRITICAL)
 
 **Simple API Pattern** – For MVPs, internal tools, small teams:
@@ -89,7 +78,6 @@ Each module = independent bounded context with own:
 ```
 
 ### 2. Performance & Memory (CRITICAL)
-
 | Rule | Impact | Quick Fix |
 |------|--------|-----------|
 | `perf-span` | CRITICAL | Use `Span<T>` for slicing without allocation |
@@ -116,7 +104,6 @@ public byte[] GetBuffer() => ArrayPool<byte>.Shared.Rent(4096);
 ```
 
 ### 3. Entity Framework Core (HIGH)
-
 | Rule | Impact | Quick Fix |
 |------|--------|-----------|
 | `ef-notracking` | CRITICAL | Use `.AsNoTracking()` for read-only queries |
@@ -140,7 +127,6 @@ var orders = await _context.Orders
 ```
 
 ### 4. CQRS & Mediator (HIGH)
-
 | Rule | Impact | Description |
 |------|--------|-------------|
 | `cqrs-separate` | HIGH | Commands mutate state, Queries read data |
@@ -179,7 +165,6 @@ public class GetOrdersHandler : IQueryHandler<GetOrdersQuery, IEnumerable<OrderD
 ```
 
 ### 5. API Design (MEDIUM-HIGH)
-
 | Rule | Impact | Quick Fix |
 |------|--------|-----------|
 | `api-versioning` | HIGH | Use URL versioning: `/api/v1/products` |
@@ -215,7 +200,6 @@ public class ProductsController : ControllerBase
 ```
 
 ### 6. Async/Await Patterns (MEDIUM)
-
 | Rule | Impact | Quick Fix |
 |------|--------|-----------|
 | `async-all-way` | CRITICAL | Never mix sync and async (causes deadlocks) |
@@ -239,7 +223,6 @@ public async Task<string> GetDataAsync(CancellationToken ct = default)
 ```
 
 ### 7. Common Production Pitfalls
-
 | Pitfall | Impact | Solution |
 |---------|--------|----------|
 | HttpClient per-request | CRITICAL | Use `IHttpClientFactory` |
@@ -275,7 +258,6 @@ public class MyService
 ---
 
 ## Searching References
-
 ```bash
 # Find patterns by keyword
 grep -l "ef core" references/
