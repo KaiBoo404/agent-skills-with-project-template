@@ -28,11 +28,14 @@ Your Project/
 
 ### Option A: CLI (Recommended)
 ```bash
-# Lite setup (3 files — AGENTS.md + project.md + conventions.md)
-npx @vibecoding/skills init myproject
+# Run directly from GitHub (no install needed)
+npx github:KaiBoo404/agent-skills-with-project-template init myproject
 
-# Full setup (all context files + stubs + skills manifest)
-npx @vibecoding/skills init myproject --full
+# OR if running locally from this repo
+npx . init myproject
+
+# OR if published to npm (future)
+npx @vibecoding/skills init myproject
 ```
 
 ### Option B: Manual

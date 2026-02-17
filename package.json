@@ -18,7 +18,7 @@
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/vibecoding/skills"
+        "url": "https://github.com/KaiBoo404/agent-skills-with-project-template"
     },
     "engines": {
         "node": ">=18.0.0"
@@ -26,6 +26,9 @@
     "files": [
         "bin/",
         "templates/",
-        "README.md"
+        "README.md",
+        "AGENTS.md",
+        ".context/",
+        ".agents/"
     ]
 }
