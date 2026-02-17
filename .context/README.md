@@ -7,6 +7,22 @@ This directory (`/.context`) is the **Single Source of Truth** for this project.
 
 ## 📂 Structure & Responsibilities
 
+```text
+root/
+├── .cursorrules           # (Optional) Points AI to read context/00_system_role.md
+├── context/               # The "Brain" of the project
+│   ├── 00_system_role.md  # The "Steering" (Persona, Behavior, Workflow)
+│   ├── 01_project_map.md  # The "Big Picture" (Architecture, Directories)
+│   ├── 02_tech_stack.md   # The "Tools" (Libraries, Versions, DB Schema)
+│   ├── 03_conventions.md  # The "Style" (Patterns, Naming, Linting)
+│   └── active_specs/      # Atomic units of work (The "Tasks")
+│       ├── feature_001_auth_flow.md
+│       └── feature_002_dashboard_api.md
+├── src/                   # Application Code
+├── docs/                  # End-user documentation (Output, not Input)
+└── AGENTS.md              # AI Agents configuration
+```
+
 | File | Purpose | When to Edit? |
 | :--- | :--- | :--- |
 | **`00_system_role.md`** | **The Persona.** Defines *how* the AI behaves (tone, caution level, strictness). | Rarely. Only if you want to change the AI's "personality." |
@@ -58,10 +74,16 @@ To avoid conflicting instructions, strictly separate concerns:
 *If you are using Cursor/Windsurf/Github Copilot, paste this into your `.cursorrules` or `.github/copilot-instructions.md` or global prompt:*
 
 ```
-This project uses a centralized context system.
+This project uses a centralized layered context system. You MUST follow this priority order when generating code:
 
-1.  **Primary Knowledge Base:** Look in the `.context/` directory.
-2.  **Role Definition:** Always prioritize instructions found in `.context/00_system_role.md`.
-3.  **Coding Standards:** Before generating code, cross-reference `.context/03_conventions.md`.
-4.  **Project Map:** Always refer to `.context/01_project_map.md` for project structure."
+### HARD CONSTRAINTS (Highest Priority)
+* **Primary Knowledge Base:** Look in the `.context/` directory.
+* **Role Definition:** Always prioritize instructions found in `.context/00_system_role.md`.
+* **Coding Standards:** Before generating code, cross-reference `.context/03_conventions.md`.
+* **Project Map:** Always refer to `.context/01_project_map.md` for project structure.
+
+### ENGINEERING STANDARDS (Medium Priority - The "How-To")
+* **Imported Skills & Domain Expertise (`.context/skills/*`):**
+	* **Dynamic Ingestion:** Treat all files and subdirectories within `.context/skills/` as your active knowledge base for implementation patterns (whether they are for React Native, Backend, or UI/UX) to optimize code quality, performance, and maintainability..
+	* **Conflict Resolution:** if a skill suggests a specific library or architectural change that conflicts with the **Hard Constraints (Layer 1)**, the **Hard Constraints always win**.
 ```

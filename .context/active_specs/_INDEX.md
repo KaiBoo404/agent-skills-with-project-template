@@ -1,10 +1,10 @@
-# OnebookMobileAPI Improvement Specifications Index
+# Improvement Specifications Index
 
 > Created: 2026-01-02  
 > Last Updated: 2026-02-16  
 > Status: Active
 
-This directory contains individual improvement specifications for the OnebookMobileAPI project. Each spec is a standalone document with detailed implementation guidance.
+This directory contains individual improvement specifications for the MyProject project. Each spec is a standalone document with detailed implementation guidance.
 
 ---
 

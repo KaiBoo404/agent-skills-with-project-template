@@ -1,64 +1,31 @@
-# Feature Template
-
-## Feature Name
+# Feature Name
 [Brief, descriptive name for the feature]
 
-## Status
-`[ ] Not Started` | `[/] In Progress` | `[x] Completed`
-
+**Status:** `[ ] Not Started` | `[/] In Progress` | `[x] Completed`  
+**Priority:** [`High` | `Medium` | `Low`]  
 **Last Updated:** [Date]
 
----
+## Goal
+[What are we building and why?]
 
 ## User Story
 **As a** [user type]  
 **I want** [goal/desire]  
 **So that** [benefit/value]
 
----
-
 ## Requirements
 
 ### Functional Requirements
 - [ ] Requirement 1
 - [ ] Requirement 2
-- [ ] Requirement 3
+- [ ] Edge Case: [What happens if X fails?]
+
 
 ### Non-Functional Requirements
 - [ ] Performance: [specific performance criteria]
 - [ ] Security: [security considerations]
 - [ ] Accessibility: [accessibility requirements]
 - [ ] Compatibility: [iOS/Android version requirements]
-
----
-
-## Technical Approach
-
-### Architecture
-[High-level description of the technical solution]
-
-### Module Structure
-```
-{module_name}/
-├── components/          # UI components specific to this feature
-├── pages/              # Screen components
-├── hooks/              # Custom hooks
-├── api/                # API integration
-├── stores/             # MobX stores (if needed)
-├── types/              # TypeScript types
-├── utils/              # Utility functions
-└── constants.ts        # Constants
-```
-
-### Key Technologies
-- [Library/technology 1]: [purpose]
-- [Library/technology 2]: [purpose]
-
-### Dependencies
-- Depends on: [list any module dependencies]
-- Required packages: [any new npm packages needed]
-
----
 
 ## Implementation Plan
 
@@ -73,8 +40,6 @@
 ### Phase 3: [Phase Name]
 - [ ] Task 1
 - [ ] Task 2
-
----
 
 ## Verification Plan
 
@@ -98,18 +63,12 @@
 - [ ] Performance benchmark met
 - [ ] No regressions in existing functionality
 
----
-
 ## Related Files
 - `path/to/file1.ts`: [description]
 - `path/to/file2.tsx`: [description]
 
----
-
 ## Notes & Decisions
 [Any important decisions, trade-offs, or context that future developers should know]
-
----
 
 ## References
 - [Link to design mockups]

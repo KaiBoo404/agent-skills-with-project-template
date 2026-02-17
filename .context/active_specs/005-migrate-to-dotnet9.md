@@ -4,8 +4,8 @@ priority: medium
 effort: medium
 impact: 20-40% performance improvement, modern features, extended support
 status: completed
-created: 2026-01-02
-updated: 2026-02-10
+created: 2026-XX-XX
+updated: 2026-XX-XX
 ---
 
 # Migrate to .NET 9.0
@@ -33,8 +33,8 @@ Current project uses **.NET 7.0** which:
 ## Affected Files
 
 ### Primary
-- `OnebookMobileAPI.csproj` (line 4)
-- `OnebookMobileAPI_UnitTest.csproj`
+- `MyProject.csproj` (line 4)
+- `MyProject_UnitTest.csproj`
 
 ### May Need Updates
 - Package references (some may have .NET 9 specific versions)
@@ -45,7 +45,7 @@ Current project uses **.NET 7.0** which:
 
 ### 1. Update Target Framework
 
-**OnebookMobileAPI.csproj**:
+**MyProject.csproj**:
 ```diff
 - <TargetFramework>net7.0</TargetFramework>
 + <TargetFramework>net9.0</TargetFramework>
