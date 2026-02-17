@@ -1,0 +1,31 @@
+{
+    "name": "@vibecoding/skills",
+    "version": "0.1.0",
+    "description": "CLI for managing AI coding skills and context in Vibe Coding projects",
+    "bin": {
+        "skills": "./bin/skills.js"
+    },
+    "keywords": [
+        "vibe-coding",
+        "ai",
+        "skills",
+        "context",
+        "agents",
+        "cursor",
+        "claude",
+        "copilot"
+    ],
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/vibecoding/skills"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "files": [
+        "bin/",
+        "templates/",
+        "README.md"
+    ]
+}

@@ -1,0 +1,111 @@
+{
+    "$schema": "https://vibecoding.dev/schemas/skills.json",
+    "version": "1.0.0",
+    "skills": {
+        "context-sync": {
+            "version": "1.0.0",
+            "source": "core",
+            "description": "Detects when code changes should trigger updates to .context/ files"
+        },
+        "spec-lifecycle": {
+            "version": "1.0.0",
+            "source": "core",
+            "description": "Manages feature spec lifecycle from creation to archival"
+        },
+        "architecture-guard": {
+            "version": "1.0.0",
+            "source": "core",
+            "description": "Validates file placement against architecture.md"
+        },
+        "commit-conventions": {
+            "version": "1.0.0",
+            "source": "core",
+            "description": "Generates structured commit messages following conventions.md"
+        },
+        "onboard": {
+            "version": "1.0.0",
+            "source": "core",
+            "description": "Generates project dashboard from .context/ files for session start"
+        },
+        "context-driven-development": {
+            "version": "1.0.0",
+            "source": "registry",
+            "description": "Context-driven development methodology and artifact management"
+        },
+        "brainstorming": {
+            "version": "1.0.0",
+            "source": "registry",
+            "description": "Structured brainstorming and ideation workflows"
+        },
+        "project-planner": {
+            "version": "1.0.0",
+            "source": "registry",
+            "description": "Project planning and task decomposition"
+        },
+        "skill-planner": {
+            "version": "1.0.0",
+            "source": "registry",
+            "description": "Create phased implementation plans from research findings"
+        },
+        "skill-researcher": {
+            "version": "1.0.0",
+            "source": "registry",
+            "description": "Research and evaluate skills for potential installation"
+        },
+        "find-skills": {
+            "version": "1.0.0",
+            "source": "registry",
+            "description": "Search and discover available skills from the registry"
+        },
+        "strategy-advisor": {
+            "version": "1.0.0",
+            "source": "registry",
+            "description": "Strategic analysis and advisory for technical decisions"
+        },
+        "architecture-decision-records": {
+            "version": "1.0.0",
+            "source": "registry",
+            "description": "Create and manage Architecture Decision Records (ADRs)"
+        },
+        "technical-design-doc-creator": {
+            "version": "1.0.0",
+            "source": "registry",
+            "description": "Generate structured technical design documents"
+        },
+        "prompt-engineering-patterns": {
+            "version": "1.0.0",
+            "source": "registry",
+            "description": "Prompt engineering patterns and best practices"
+        },
+        "dotnet-best-practices": {
+            "version": "1.0.0",
+            "source": "registry",
+            "description": ".NET best practices, performance patterns, and production pitfalls"
+        },
+        "microsoft-code-reference": {
+            "version": "1.0.0",
+            "source": "registry",
+            "description": "Microsoft code reference and documentation"
+        },
+        "microsoft-docs": {
+            "version": "1.0.0",
+            "source": "registry",
+            "description": "Microsoft documentation and API references"
+        },
+        "react-native-best-practices": {
+            "version": "1.0.0",
+            "source": "registry",
+            "description": "React Native performance, bundle optimization, and mobile best practices"
+        },
+        "skill-creator": {
+            "version": "1.0.0",
+            "source": "registry",
+            "description": "Tools and workflows for creating new agent skills"
+        },
+        "vercel-react-native-skills": {
+            "version": "1.0.0",
+            "source": "registry",
+            "description": "Vercel-specific React Native patterns and optimizations"
+        }
+    }
+}
