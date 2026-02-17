@@ -17,10 +17,8 @@ const path = require("path");
 
 const COMMANDS = {
   init: handleInit,
-  add: handleAdd,
-  remove: handleRemove,
+  sync: handleSync,
   list: handleList,
-  search: handleSearch,
   help: handleHelp,
 };
 
@@ -111,17 +109,25 @@ async function handleInit(args) {
     writeFile(".github/copilot-instructions.md", stubContent);
     console.log(`  📄 Created .github/copilot-instructions.md`);
 
-    // Skills manifest
-    const manifest = {
-      $schema: "https://vibecoding.dev/schemas/skills.json",
-      version: "1.0.0",
-      skills: {},
-    };
-    writeFile(
-      ".agents/skills/skills.json",
-      JSON.stringify(manifest, null, 2) + "\n"
+    // Create empty manifest if it doesn't exist
+    const manifestPath = path.join(
+      process.cwd(),
+      ".agents",
+      "skills",
+      "skills.json"
     );
-    console.log(`  📄 Created .agents/skills/skills.json`);
+    if (!fs.existsSync(manifestPath)) {
+      const manifest = {
+        $schema: "https://vibecoding.dev/schemas/skills.json",
+        version: "1.0.0",
+        skills: {},
+      };
+      writeFile(
+        ".agents/skills/skills.json",
+        JSON.stringify(manifest, null, 2) + "\n"
+      );
+      console.log(`  📄 Created .agents/skills/skills.json`);
+    }
   }
 
   console.log(`\n✅ Done! Your project is ready for Vibe Coding.`);
@@ -134,120 +140,71 @@ async function handleInit(args) {
       `  4. Run with --full flag later to add architecture, stack, and skills`
     );
   } else {
-    console.log(
-      `  4. Run 'npx @vibecoding/skills add <name>' to install skills`
-    );
+    console.log(`  4. Install skills using Vercel's tool: 'npx skills add <name>'`);
+    console.log(`  5. Run 'npx . sync' to update your local skills.json manifest`);
   }
   console.log("");
 }
 
-async function handleAdd(args) {
-  const skillName = args[0];
-  if (!skillName) {
-    throw new Error("Please specify a skill name: npx @vibecoding/skills add <name>");
-  }
+async function handleSync() {
+  const skillsDir = path.join(process.cwd(), ".agents", "skills");
+  const manifestPath = path.join(skillsDir, "skills.json");
 
-  const manifestPath = path.join(
-    process.cwd(),
-    ".agents",
-    "skills",
-    "skills.json"
-  );
-
-  // Ensure manifest exists
-  if (!fs.existsSync(manifestPath)) {
+  if (!fs.existsSync(skillsDir)) {
     throw new Error(
-      "No skills.json found. Run 'npx @vibecoding/skills init --full' first."
+      "No .agents/skills/ directory found. Run 'init --full' first."
     );
   }
 
-  const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf-8"));
+  console.log(`\n🔄 Syncing skills from ${skillsDir}...\n`);
 
-  if (manifest.skills[skillName]) {
-    console.log(`ℹ️  Skill "${skillName}" is already installed.`);
-    return;
-  }
-
-  // TODO: In v1.0, fetch from registry. For now, create a stub.
-  const skillDir = path.join(
-    process.cwd(),
-    ".agents",
-    "skills",
-    skillName
-  );
-  fs.mkdirSync(skillDir, { recursive: true });
-
-  const stubSkill = [
-    "---",
-    `name: ${skillName}`,
-    `description: TODO — describe what this skill does`,
-    "version: 1.0.0",
-    "---",
-    "",
-    `# ${skillName}`,
-    "",
-    "TODO: Add skill instructions here.",
-    "",
-  ].join("\n");
-
-  fs.writeFileSync(path.join(skillDir, "SKILL.md"), stubSkill);
-
-  // Update manifest
-  manifest.skills[skillName] = {
+  // Read existing manifest to preserve sources if possible, or just start fresh?
+  // Let's start fresh but try to infer source.
+  let manifest = {
+    $schema: "https://vibecoding.dev/schemas/skills.json",
     version: "1.0.0",
-    source: "local",
-    description: "TODO — describe what this skill does",
+    skills: {},
   };
+
+  if (fs.existsSync(manifestPath)) {
+    try {
+      const existing = JSON.parse(fs.readFileSync(manifestPath, "utf-8"));
+      if (existing.skills) manifest.skills = existing.skills;
+    } catch (e) {
+      console.warn("  ⚠️  Could not parse existing skills.json, starting fresh.");
+    }
+  }
+
+  const entries = fs.readdirSync(skillsDir, { withFileTypes: true });
+  const detectedSkills = {};
+
+  for (const entry of entries) {
+    if (!entry.isDirectory()) continue;
+    const skillName = entry.name;
+    const skillPath = path.join(skillsDir, skillName, "SKILL.md");
+
+    if (fs.existsSync(skillPath)) {
+      const content = fs.readFileSync(skillPath, "utf-8");
+      const metadata = parseFrontmatter(content);
+
+      detectedSkills[skillName] = {
+        version: metadata.version || "1.0.0",
+        // Preserve existing source if available, otherwise default to 'local'
+        source: manifest.skills[skillName]?.source || "local",
+        description: metadata.description || "No description provided",
+      };
+
+      console.log(`  ✅ Detected ${skillName}`);
+    } else {
+      console.log(`  ⚠️  Skipping ${skillName} (no SKILL.md found)`);
+    }
+  }
+
+  // Update manifest with detected skills, removing ones that don't exist anymore
+  manifest.skills = detectedSkills;
+
   fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + "\n");
-
-  console.log(`\n✅ Installed skill: ${skillName}`);
-  console.log(`   Edit: .agents/skills/${skillName}/SKILL.md`);
-  console.log(`   Manifest updated: .agents/skills/skills.json\n`);
-}
-
-async function handleRemove(args) {
-  const skillName = args[0];
-  if (!skillName) {
-    throw new Error(
-      "Please specify a skill name: npx @vibecoding/skills remove <name>"
-    );
-  }
-
-  const manifestPath = path.join(
-    process.cwd(),
-    ".agents",
-    "skills",
-    "skills.json"
-  );
-
-  if (!fs.existsSync(manifestPath)) {
-    throw new Error("No skills.json found.");
-  }
-
-  const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf-8"));
-
-  if (!manifest.skills[skillName]) {
-    console.log(`ℹ️  Skill "${skillName}" is not installed.`);
-    return;
-  }
-
-  // Remove directory
-  const skillDir = path.join(
-    process.cwd(),
-    ".agents",
-    "skills",
-    skillName
-  );
-  if (fs.existsSync(skillDir)) {
-    fs.rmSync(skillDir, { recursive: true, force: true });
-  }
-
-  // Update manifest
-  delete manifest.skills[skillName];
-  fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + "\n");
-
-  console.log(`\n✅ Removed skill: ${skillName}`);
-  console.log(`   Manifest updated: .agents/skills/skills.json\n`);
+  console.log(`\n📄 Updated .agents/skills/skills.json\n`);
 }
 
 async function handleList() {
@@ -260,7 +217,7 @@ async function handleList() {
 
   if (!fs.existsSync(manifestPath)) {
     console.log(
-      "\nNo skills installed. Run 'npx @vibecoding/skills init --full' first.\n"
+      "\nNo skills installed. Run 'init --full' first.\n"
     );
     return;
   }
@@ -269,7 +226,7 @@ async function handleList() {
   const skills = Object.entries(manifest.skills);
 
   if (skills.length === 0) {
-    console.log("\nNo skills installed.\n");
+    console.log("\nNo skills found in manifest.\n");
     return;
   }
 
@@ -277,7 +234,8 @@ async function handleList() {
 
   const core = skills.filter(([, s]) => s.source === "core");
   const registry = skills.filter(([, s]) => s.source === "registry");
-  const local = skills.filter(([, s]) => s.source === "local");
+  const legacy = skills.filter(([, s]) => s.source === "legacy");
+  const local = skills.filter(([, s]) => s.source === "local"); // Or undefined
 
   if (core.length > 0) {
     console.log("  CORE:");
@@ -293,32 +251,21 @@ async function handleList() {
     }
   }
 
+  if (legacy.length > 0) {
+    console.log(`\n  LEGACY:`);
+    for (const [name, info] of legacy) {
+      console.log(`    ${name}@${info.version} — ${info.description}`);
+    }
+  }
+
   if (local.length > 0) {
-    console.log(`\n  LOCAL:`);
+    console.log(`\n  LOCAL/OTHER:`);
     for (const [name, info] of local) {
       console.log(`    ${name}@${info.version} — ${info.description}`);
     }
   }
 
   console.log("");
-}
-
-async function handleSearch(args) {
-  const query = args.join(" ");
-  if (!query) {
-    throw new Error(
-      "Please specify a search query: npx @vibecoding/skills search <query>"
-    );
-  }
-
-  // TODO: In v1.0, search a remote registry
-  console.log(`\n🔍 Searching for "${query}"...\n`);
-  console.log(
-    "  Registry search is not yet available. Coming in v1.0.\n"
-  );
-  console.log(
-    "  For now, browse available skills at: https://github.com/vibecoding/skills-registry\n"
-  );
 }
 
 function handleHelp() {
@@ -331,20 +278,36 @@ function handleHelp() {
   COMMANDS:
     init              Scaffold Lite context system (AGENTS.md + 2 context files)
     init --full       Scaffold full context system with all files + stubs
-    add <name>        Install a skill
-    remove <name>     Remove a skill
-    list              List installed skills
-    search <query>    Search the skill registry
+    sync              Scan .agents/skills/ and update skills.json manifest
+    list              List skills defined in skills.json
+    doctor            Verify system health (TODO)
 
   EXAMPLES:
-    npx @vibecoding/skills init myproject
-    npx @vibecoding/skills init --full
-    npx @vibecoding/skills add dotnet-best-practices
-    npx @vibecoding/skills list
+    npx . init myproject
+    npx . sync
+    npx . list
   `);
 }
 
 // ─── Helpers ───────────────────────────────────────────────────────────
+
+function parseFrontmatter(content) {
+  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  if (!match) return {};
+
+  const frontmatter = {};
+  const lines = match[1].split(/\r?\n/);
+
+  for (const line of lines) {
+    const parts = line.split(':');
+    if (parts.length >= 2) {
+      const key = parts[0].trim();
+      const value = parts.slice(1).join(':').trim();
+      frontmatter[key] = value;
+    }
+  }
+  return frontmatter;
+}
 
 function writeTemplate(templateName, outputPath, replacements) {
   const templatePath = path.join(TEMPLATES_DIR, templateName);

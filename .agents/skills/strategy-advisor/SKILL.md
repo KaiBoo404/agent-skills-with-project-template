@@ -1,9 +1,6 @@
 ---
 name: strategy-advisor
-description: |
-  High-level strategic thinking and business decision guidance for planning and direction-setting.
-  Use when: making strategic decisions, evaluating business options, setting direction, analyzing
-  trade-offs, or when user mentions strategy, business planning, competitive analysis, or long-term planning.
+description: High-level strategic thinking and business decision guidance for planning and direction-setting. Use when making strategic decisions, evaluating business options, setting direction, analyzing trade-offs, or when user mentions strategy, or business planning.
 license: MIT
 metadata:
   author: awesome-llm-apps

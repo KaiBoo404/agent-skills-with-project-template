@@ -26,23 +26,29 @@ Your Project/
 
 ## Quick Start
 
-### Option A: CLI (Recommended)
 ```bash
-# Run directly from GitHub (no install needed)
-npx github:KaiBoo404/agent-skills-with-project-template init myproject
+# 1. Initialize Vibe Coding Context
+npx KaiBoo404/agent-skills-with-project-template init my-project --full
 
-# OR if running locally from this repo
-npx . init myproject
+# 2. Install Skills (using Vercel's CLI)
+npx skills add KaiBoo404/agent-skills-with-project-template
 
-# OR if published to npm (future)
-npx @vibecoding/skills init myproject
+# 3. Sync Context (updates skills.json)
+npx KaiBoo404/agent-skills-with-project-template sync
 ```
 
-### Option B: Manual
-1. Copy `AGENTS.md` to your project root
-2. Create `.context/` directory
-3. Copy `project.md` and `conventions.md` into `.context/`
-4. Fill in the `{placeholders}`
+> **Note:** We use Vercel's `npx skills` for installation, and our CLI for context management.
+
+## 🧠 Skills Management
+
+Skills are installed in `.agents/skills/` and managed via `skills.json`.
+
+| Command | Description |
+|---|---|
+| `npx KaiBoo404/agent-skills-with-project-template init` | Scaffold the Vibe Coding context system |
+| `npx skills add <name>` | Install a skill from the registry (Vercel CLI) |
+| `npx KaiBoo404/agent-skills-with-project-template sync` | Scan `.agents/skills/` and update `skills.json` |
+| `npx KaiBoo404/agent-skills-with-project-template list` | View installed skills and their status |
 
 ## How It Works
 
